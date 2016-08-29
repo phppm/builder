@@ -1,0 +1,23 @@
+{
+  "name": "rustphp/builder",
+  "description": "YouZan php framework builder",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "cjj",
+      "email": "cjj8110@163.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "\\rustphp\\builder\\": "src/"
+    }
+  },
+  "require": {
+    "rustphp/zan": "dev-master"
+  },
+  "bin": [
+    "builder"
+  ]
+}
