@@ -1,0 +1,70 @@
+<a class="menu-toggler" id="menu-toggler" href="#">
+    <span class="menu-text"></span>
+</a>
+<div class="sidebar" id="sidebar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="icon-signal"></i>
+            </button>
+            <button class="btn btn-info">
+                <i class="icon-pencil"></i>
+            </button>
+            <button class="btn btn-warning">
+                <i class="icon-group"></i>
+            </button>
+            <button class="btn btn-danger">
+                <i class="icon-cogs"></i>
+            </button>
+        </div>
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+            <span class="btn btn-info"></span>
+            <span class="btn btn-warning"></span>
+            <span class="btn btn-danger"></span>
+        </div>
+    </div><!-- #sidebar-shortcuts -->
+
+    <ul class="nav nav-list">
+        <li <?php if('home/index/index' === $request_route):?>class="active"<?php endif;?>>
+            <a href="<?php echo URL::site('/','mushroom');?>">
+                <i class="icon-dashboard"></i>
+                <span class="menu-text"> 设备控制台 </span>
+            </a>
+        </li>
+        <li <?php if('home/index/charts' === $request_route):?>class="active"<?php endif;?>>
+            <a href="<?php echo URL::site('/home/index/charts','mushroom');?>">
+                <i class="icon-camera"></i>
+                <span class="menu-text">设备数据</span>
+            </a>
+        </li>
+        <li <?php if('mushroom/advise/index' === $request_route):?>class="active"<?php endif;?>>
+        <a href="<?php echo URL::site('/mushroom/advise/index','mushroom');?>">
+            <i class="icon-bullhorn"></i>
+            <span class="menu-text">健康建议</span>
+        </a>
+        </li>
+        <li <?php if('mushroom/article/index' === $request_route):?>class="active"<?php endif;?>>
+        <a href="<?php echo URL::site('/mushroom/article/index','mushroom');?>">
+            <i class="icon-book"></i>
+            <span class="menu-text">文章管理</span>
+        </a>
+        </li>
+        <li <?php if('mushroom/version/index' === $request_route):?>class="active"<?php endif;?>>
+        <a href="<?php echo URL::site('/mushroom/version/index','mushroom');?>">
+            <i class="icon-check-empty"></i>
+            <span class="menu-text">版本管理</span>
+        </a>
+        </li>
+    </ul><!-- /.nav-list -->
+    <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+           data-icon2="icon-double-angle-right"></i>
+    </div>
+</div>

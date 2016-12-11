@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="<?php echo URL::site('favicon.ico', 'static');?>"/>
+    <?php $layout->block('title'); ?>
+        <?php $tpl->load('common/widget/page_title'); ?>
+    <?php $layout->endBlock();?>
+    <?php $tpl->load('common/widget/common_style'); ?>
+    <?php $layout->place('page_style'); ?>
+    <?php $tpl->load('common/tpl/head_script'); ?>
+</head>
+<body class="login-layout">
+    <?php $layout->place('main'); ?>
+    <?php $tpl->load('common/widget/vendor_script'); ?>
+    <?php $tpl->load('common/widget/common_script'); ?>
+    <?php $layout->place('page_script'); ?>
+</body>
+</html>
