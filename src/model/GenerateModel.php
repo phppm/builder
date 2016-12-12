@@ -9,12 +9,77 @@ class GenerateModel {
     const CAMEL_NAMED = 1;//驼峰命名
     const SNAKE_NAMED = 2;//蛇形命名
     private static $_nameRule; //命名规则
-    private        $namespace, $classId, $className, $moduleName;
+    private        $namespace, $classId, $className, $classNote, $moduleName;
     /**
      * @var DataTableModel
      */
     private $tableModel;
-    private $outputPath, $sourceRootPath;
+    private $outputPath, $sourceRootPath, $composerName;
+
+    /**
+     * GenerateModel constructor.
+     *
+     * @param array $setting
+     */
+    public function __construct($setting) {
+        $this->initSetting($setting);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClassId() {
+        return $this->classId;
+    }
+
+    /**
+     * @param mixed $classId
+     */
+    public function setClassId($classId) {
+        $this->classId = $classId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClassName() {
+        return $this->className;
+    }
+
+    /**
+     * @param mixed $className
+     */
+    public function setClassName($className) {
+        $this->className = $className;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClassNote() {
+        return $this->classNote;
+    }
+
+    /**
+     * @param mixed $classNote
+     */
+    public function setClassNote($classNote) {
+        $this->classNote = $classNote;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComposerName() {
+        return $this->composerName;
+    }
+
+    /**
+     * @param mixed $composerName
+     */
+    public function setComposerName($composerName) {
+        $this->composerName = $composerName;
+    }
 
     /**
      * @return mixed
@@ -28,10 +93,6 @@ class GenerateModel {
      */
     public function setOutputPath($outputPath) {
         $this->outputPath = $outputPath;
-    }
-
-    public function __construct($setting) {
-        $this->initSetting($setting);
     }
 
     /**
@@ -64,9 +125,6 @@ class GenerateModel {
      * @return bool
      */
     public function setTableModel($name, $comment, $primaryKey, $columns) {
-        if (!$name || !$primaryKey || !$columns) {
-            return FALSE;
-        }
         $this->tableModel = new DataTableModel($name, $comment, $primaryKey, $columns);
         return TRUE;
     }
@@ -83,34 +141,6 @@ class GenerateModel {
      */
     public function setNamespace($namespace) {
         $this->namespace = $namespace;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getClassId() {
-        return $this->classId;
-    }
-
-    /**
-     * @param mixed $classId
-     */
-    public function setClassId($classId) {
-        $this->classId = $classId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getClassName() {
-        return $this->className;
-    }
-
-    /**
-     * @param mixed $className
-     */
-    public function setClassName($className) {
-        $this->className = $className;
     }
 
     /**
@@ -150,7 +180,7 @@ class GenerateModel {
      */
     private function getCamelName($name) {
         $names = explode('_', $name);
-        $result = strtolower(array_shift($names));
+        $result = lcfirst(array_shift($names));
         $names = array_map(function($value) {
             return ucfirst($value);
         }, $names);
@@ -167,13 +197,15 @@ class GenerateModel {
         //设置
         $namespace = $setting['namespace']??NULL;
         $this->setNamespace($namespace);
+        $composerName = $setting['composerName']??NULL;
+        $this->setComposerName($composerName);
         $sourcePath = $setting['sourcePath']??NULL;
         $this->setSourceRootPath($sourcePath);
         $outputPath = $setting['outputPath']??NULL;
         $this->setOutputPath($outputPath);
         $moduleName = $setting['moduleName']??NULL;
         $this->setModuleName($moduleName);
-        $className = $setting['className'];
+        $className = $setting['className']??NULL;
         $this->setClassName($className);
         $classId = $className ? $this->getCamelName($className) : NULL;
         $this->setClassId($classId);
@@ -181,8 +213,12 @@ class GenerateModel {
         $tableName = $setting['tableName']??NULL;
         $tableInfo = $setting['tableInfo']??NULL;
         $tableComment = $tableInfo['comment']??NULL;
+        $this->setClassNote($tableComment);
         $primaryKey = $tableInfo['primaryKey']??NULL;
+        $primary_keys = $primaryKey && is_array($primaryKey) ? array_keys($primaryKey) : ['id'];
+        $primary_keys = count($primary_keys) >= 1 ? $primary_keys : [$primaryKey];
+        $primary_key = array_shift($primary_keys);
         $columns = $tableInfo['columns']??[];
-        $this->setTableModel($tableName, $tableComment, $primaryKey, $columns);
+        $this->setTableModel($tableName, $tableComment, $primary_key, $columns);
     }
 }

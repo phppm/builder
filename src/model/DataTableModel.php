@@ -25,6 +25,7 @@ class DataTableModel {
     public function __construct($name, $comment, $primaryKey, $columns) {
         $this->setName($name);
         $this->setComment($comment);
+        $this->setPrimaryKey($primaryKey);
         $this->setColumnsModel($columns);
     }
 

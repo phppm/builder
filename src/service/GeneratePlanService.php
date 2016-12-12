@@ -6,6 +6,7 @@
  * Time: 下午4:52
  */
 namespace rustphp\builder\service;
+
 use rustphp\builder\model\GeneratePlanModel;
 use rustphp\builder\util\Config;
 use rustphp\builder\util\Constant;
@@ -14,6 +15,7 @@ use rustphp\builder\util\Registry;
 
 /**
  * Class GeneratePlanService
+ *
  * @package rustphp\builder\service
  */
 class GeneratePlanService {
@@ -27,6 +29,7 @@ class GeneratePlanService {
 
     /**
      * GeneratePlanService constructor.
+     *
      * @param \rustphp\builder\util\Config $config
      */
     public function __construct($config) {
@@ -37,21 +40,20 @@ class GeneratePlanService {
         //获取plan配置
         $plan_config = $this->config;
         $plan_name = $plan_config->get('plan');
-        $frameworkTemplate = str_replace('.', '/', $plan_config->get('framework')).'/'.$plan_name;
+        $frameworkTemplate = str_replace('.', '/', $plan_config->get('framework')) . '/' . $plan_name;
         //获取plan模板
         $template_path = vsprintf('%s/resource/plan/%s/template/', [ROOT_PATH, $frameworkTemplate]);
         //获取数据源名称
         $data_source_name = $plan_config->get('dataSource');
         //生成
+        //输出
+        $output_path = ROOT_PATH . '/' . $plan_config->get('outputPath');
         $registry = Registry::getInstance();
         $db_config = $registry->get(Constant::DB_CONFIG_KEY);
         $connections = $db_config->get('connections');
         $dataSource = $this->bindDataSource($data_source_name, $connections);
         $generate_plan_model = new GeneratePlanModel($dataSource, $plan_config->get('generator'), $template_path);
-        $generate_plan_model->build();
-        //输出
-        $output_path = ROOT_PATH . '/' . $plan_config->get('outputPath');
-        $generate_plan_model->output($output_path);
+        $generate_plan_model->build()->output($output_path);
         return $this;
     }
 
@@ -59,7 +61,8 @@ class GeneratePlanService {
      * 绑定数据源
      *
      * @param string                       $data_source
-     * @param \rustphp\builder\util\Config $db_config*
+     * @param \rustphp\builder\util\Config $db_config *
+     *
      * @return array
      */
     protected function bindDataSource($data_source, $db_config) {
@@ -75,7 +78,7 @@ class GeneratePlanService {
         foreach ($all_tables as $table => $tableInfo) {
             $columns = $this->getColumns($tableInfo);
             $result[$table] = [
-                'comment'      => $tableInfo->Comment,
+                'comment'    => $tableInfo->Comment,
                 'primaryKey' => $columns['primaryKey'],
                 'columns'    => $columns['allFields'],
             ];
@@ -85,6 +88,7 @@ class GeneratePlanService {
 
     /**
      * @param $tableInfo
+     *
      * @return array
      */
     protected function getColumns($tableInfo) {
@@ -114,6 +118,7 @@ class GeneratePlanService {
      * get all tables and files by connection name
      *
      * @param \rustphp\builder\util\Config $conn_config
+     *
      * @return array
      */
     protected function getTablesByConnectionName($conn_config) {

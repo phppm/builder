@@ -82,17 +82,17 @@ class GeneratePlanModel {
         $baseConfig = $this->config->get('base', TRUE);
         $files = &$this->files;
         $generateByProject = $config['generate_by_project']??FALSE;
-        $is_append = $config['is_append']??FALSE;
-        if (!$generateByProject || $is_append) {
+        //$is_append = $config['is_append']??FALSE;
+        if (!$generateByProject) {
             $files[$generatePath] = [
                 'template' => $templateFile,
-                'paras'    => $baseConfig,
+                'model'    => new GenerateModel($baseConfig),
             ];
             return;
         }
         $dataSource = $this->dataSource;
         $project = $this->config->get('project', TRUE);
-        $files = $this->initProjectFiles($project, $dataSource, [
+        $this->initProjectFiles($project, $dataSource, [
             'config'       => $config,
             'baseConfig'   => $baseConfig,
             'templateFile' => $templateFile,
@@ -106,15 +106,13 @@ class GeneratePlanModel {
      * @param array $project
      * @param array $dataSource
      * @param array $params
-     *
-     * @return array
      */
     protected function initProjectFiles($project, $dataSource, $params) {
-        $config = $params['config'];
-        $generatePath = $params['generatePath'];
-        $templateFile = $params['templateFile'];
-        $baseConfig = $params['baseConfig'];
-        $files = [];
+        $config = $params['config']??[];
+        $generatePath = $params['generatePath']??NULL;
+        $templateFile = $params['templateFile']??NULL;
+        $baseConfig = $params['baseConfig']??[];
+        $files = &$this->files;
         foreach ($project as $module => $functions) {
             foreach ($functions as $table => $class_name) {
                 $tableInfo = $dataSource[$table] ?? NULL;
@@ -140,7 +138,6 @@ class GeneratePlanModel {
                 ];
             }
         }
-        return $files;
     }
 
     /**

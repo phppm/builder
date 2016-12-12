@@ -19,6 +19,5 @@ class App {
         $config = $registry->get(Constant::PLAN_CONFIG_KEY);
         $generate_plan = new GeneratePlanService($config);
         $generate_plan->doPlan();
-        echo "\n", 'run now', "\n";
     }
 }
