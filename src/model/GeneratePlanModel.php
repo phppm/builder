@@ -2,6 +2,7 @@
 namespace rustphp\builder\model;
 
 use rustphp\builder\util\Config;
+use rustphp\builder\util\OutputBuffer;
 
 /**
  * Class GeneratePlanModel
@@ -35,16 +36,15 @@ class GeneratePlanModel {
         if (!$files) {
             return $this;
         }
-        ob_start(); //打开缓冲区
         foreach ($files as $file => $params) {
+
+            OutputBuffer::start();
             $model = $params['model'];
             $template_file = $params['template'];
-            require_once($template_file);
-            $file_content = ob_get_contents(); //得到缓冲区的内容并且赋值给$info
+            require($template_file);
+            $file_content = OutputBuffer::getAndClean();
             $files[$file] = $file_content;
-            ob_flush();
         }
-        print_r($files);die;
         return $this;
     }
 
