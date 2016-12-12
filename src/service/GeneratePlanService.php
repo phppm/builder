@@ -45,7 +45,6 @@ class GeneratePlanService {
         $template_path = vsprintf('%s/resource/plan/%s/template/', [ROOT_PATH, $frameworkTemplate]);
         //获取数据源名称
         $data_source_name = $plan_config->get('dataSource');
-        //生成
         //输出
         $output_path = ROOT_PATH . '/' . $plan_config->get('outputPath');
         $registry = Registry::getInstance();
