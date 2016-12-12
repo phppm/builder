@@ -59,8 +59,8 @@ class GeneratePlanService {
      * 绑定数据源
      *
      * @param string                       $data_source
-     * @param \rustphp\builder\util\Config $db_config
-     * @return NULL
+     * @param \rustphp\builder\util\Config $db_config*
+     * @return array
      */
     protected function bindDataSource($data_source, $db_config) {
         $all_tables = [];
@@ -69,7 +69,7 @@ class GeneratePlanService {
             $all_tables = $this->getTablesByConnectionName($conn_config);
         }
         if (!$all_tables) {
-            return NULL;
+            return [];
         }
         $result = [];
         foreach ($all_tables as $table => $tableInfo) {

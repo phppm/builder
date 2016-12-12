@@ -37,7 +37,6 @@ class GeneratePlanModel {
             return $this;
         }
         foreach ($files as $file => $params) {
-
             OutputBuffer::start();
             $model = $params['model'];
             $template_file = $params['template'];
@@ -52,7 +51,14 @@ class GeneratePlanModel {
      * @param string $output_path
      */
     public function output($output_path) {
-        //TODO:
+        foreach ($this->files as $output_file => $file_content) {
+            $dir = dirname($output_path . $output_file);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, TRUE);
+            }
+            file_put_contents($output_path . $output_file, $file_content);
+            echo "build ", $output_path, $output_file, " ok \n";
+        }
     }
 
     /**
