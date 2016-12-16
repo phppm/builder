@@ -15,6 +15,7 @@ class GenerateModel {
      */
     private $tableModel;
     private $outputPath, $sourceRootPath, $composerName;
+    private $requestPath;
 
     /**
      * GenerateModel constructor.
@@ -82,6 +83,13 @@ class GenerateModel {
     }
 
     /**
+     * @return string
+     */
+    public function getFormName() {
+        return $this->getClassId() . 'Form';
+    }
+
+    /**
      * @return mixed
      */
     public function getOutputPath() {
@@ -93,6 +101,14 @@ class GenerateModel {
      */
     public function setOutputPath($outputPath) {
         $this->outputPath = $outputPath;
+    }
+
+    public function getRequestPath() {
+        return $this->requestPath;
+    }
+
+    public function setRequestPath($path) {
+        $this->requestPath = $path;
     }
 
     /**
@@ -209,6 +225,7 @@ class GenerateModel {
         $this->setClassName($className);
         $classId = $className ? $this->getCamelName($className) : NULL;
         $this->setClassId($classId);
+        $this->setRequestPath('/' . $moduleName . '/' . $classId);
         //table model
         $tableName = $setting['tableName']??NULL;
         $tableInfo = $setting['tableInfo']??NULL;
