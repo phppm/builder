@@ -1,4 +1,5 @@
 <?php
+
 namespace rustphp\builder\model;
 /**
  * Class GenerateModel
@@ -9,7 +10,7 @@ class GenerateModel {
     const CAMEL_NAMED = 1;//驼峰命名
     const SNAKE_NAMED = 2;//蛇形命名
     private static $_nameRule; //命名规则
-    private        $namespace, $classId, $className, $classNote, $moduleName;
+    private        $namespace, $classId, $className, $classNote, $moduleId, $moduleName;
     /**
      * @var DataTableModel
      */
@@ -142,7 +143,7 @@ class GenerateModel {
      */
     public function setTableModel($name, $comment, $primaryKey, $columns) {
         $this->tableModel = new DataTableModel($name, $comment, $primaryKey, $columns);
-        return TRUE;
+        return true;
     }
 
     /**
@@ -157,6 +158,14 @@ class GenerateModel {
      */
     public function setNamespace($namespace) {
         $this->namespace = $namespace;
+    }
+
+    public function getModuleId() {
+        return $this->moduleId;
+    }
+
+    public function setModuleId($moduleId) {
+        $this->moduleId = $moduleId;
     }
 
     /**
@@ -211,27 +220,29 @@ class GenerateModel {
      */
     private function initSetting($setting) {
         //设置
-        $namespace = $setting['namespace']??NULL;
+        $namespace = $setting['namespace']??null;
         $this->setNamespace($namespace);
-        $composerName = $setting['composerName']??NULL;
+        $composerName = $setting['composerName']??null;
         $this->setComposerName($composerName);
-        $sourcePath = $setting['sourcePath']??NULL;
+        $sourcePath = $setting['sourcePath']??null;
         $this->setSourceRootPath($sourcePath);
-        $outputPath = $setting['outputPath']??NULL;
+        $outputPath = $setting['outputPath']??null;
         $this->setOutputPath($outputPath);
-        $moduleName = $setting['moduleName']??NULL;
+        $moduleName = $setting['moduleName']??null;
+        $moduleId = $setting['moduleId']??$moduleName;
         $this->setModuleName($moduleName);
-        $className = $setting['className']??NULL;
+        $this->setModuleId($moduleId);
+        $className = $setting['className']??null;
         $this->setClassName($className);
-        $classId = $className ? $this->getCamelName($className) : NULL;
+        $classId = $className ? $this->getCamelName($className) : null;
         $this->setClassId($classId);
         $this->setRequestPath('/' . $moduleName . '/' . $classId);
         //table model
-        $tableName = $setting['tableName']??NULL;
-        $tableInfo = $setting['tableInfo']??NULL;
-        $tableComment = $tableInfo['comment']??NULL;
+        $tableName = $setting['tableName']??null;
+        $tableInfo = $setting['tableInfo']??null;
+        $tableComment = $tableInfo['comment']??null;
         $this->setClassNote($tableComment);
-        $primaryKey = $tableInfo['primaryKey']??NULL;
+        $primaryKey = $tableInfo['primaryKey']??null;
         $primary_keys = $primaryKey && is_array($primaryKey) ? array_keys($primaryKey) : ['id'];
         $primary_keys = count($primary_keys) >= 1 ? $primary_keys : [$primaryKey];
         $primary_key = array_shift($primary_keys);

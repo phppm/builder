@@ -1,5 +1,9 @@
 <?php
+
 namespace rustphp\builder\model;
+
+use rustphp\builder\util\Inflector;
+
 /**
  * Class DataTableModel
  *
@@ -27,6 +31,19 @@ class DataTableModel {
         $this->setComment($comment);
         $this->setPrimaryKey($primaryKey);
         $this->setColumnsModel($columns);
+    }
+
+    public function getPrimaryId(): string {
+        $str = preg_replace_callback('/([-_]+([a-z]{1}))/i', function($matches) {
+            return ucfirst($matches[2]);
+        }, $this->getPrimaryKey());
+        return $str;
+    }
+
+    public function getPrimaryIds(): string {
+        $id = $this->getPrimaryId();
+        $ids = Inflector::pluralize($id);
+        return $ids;
     }
 
     /**

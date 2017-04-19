@@ -1,4 +1,5 @@
 <?php
+
 namespace rustphp\builder\model;
 /**
  * Class TableColumnsModel
@@ -7,6 +8,7 @@ namespace rustphp\builder\model;
  */
 class TableColumnsModel {
     private $columns;
+    private $columnNames;
     private $properties;
     private $elements;
 
@@ -37,11 +39,15 @@ class TableColumnsModel {
         return $this->properties;
     }
 
+    public function hasColumn(string $name): bool {
+        return isset($this->columnNames[$name]);
+    }
+
     /**
      * @return null|string
      */
     public function toString() {
-        $str = NULL;
+        $str = null;
         $fields = array_column($this->getColumns(), 'name');
         if (!$fields) {
             return $str;
@@ -57,6 +63,7 @@ class TableColumnsModel {
         $properties = [];
         $elements = [];
         $fields = array_column($columns, 'name', 'comment');
+        $this->columnNames = array_flip($fields);
         if ($fields) {
             foreach ($fields as $comment => $name) {
                 $fieldInfo = explode('_', $name);
@@ -68,9 +75,10 @@ class TableColumnsModel {
                 }
                 $properties[] = lcfirst($property);
                 $elements[] = [
-                    'name'     => $property,
-                    'property' => $property,
-                    'label'    => $comment,
+                    'name'      => $property,
+                    'property'  => $property,
+                    'label'     => $comment,
+                    'fieldName' => $name,
                 ];
             }
             $this->properties = $properties;

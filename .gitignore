@@ -5,3 +5,24 @@ composer.phar
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
 .idea/
+output/
+
+php-diff-master/
+resource/plan/rustphp/rust/landsker/default.php
+resource/plan/rustphp/rust/landsker/template/BaseController.php
+resource/plan/rustphp/rust/landsker/template/Controller.php
+resource/plan/rustphp/rust/landsker/template/Dao.php
+resource/plan/rustphp/rust/landsker/template/Model.php
+resource/plan/rustphp/rust/landsker/template/Service.php
+resource/plan/rustphp/rust/landsker/template/composer.json
+resource/plan/rustphp/rust/landsker/template/sqlMap.php
+resource/plan/rustphp/rust/landsker/template/views/
+resource/plan/rustphp/rust/zj_ads/
+resource/plan/rustphp/rust/zj_community/
+resource/plan/youzan/zanphp/http_demo/template/BaseController.php
+resource/plan/youzan/zanphp/http_demo/template/Controller.php
+resource/plan/youzan/zanphp/http_demo/template/Dao.php
+resource/plan/youzan/zanphp/http_demo/template/Service.php
+resource/plan/youzan/zanphp/http_demo/template/View/Index.html
+resource/plan/youzan/zanphp/http_demo/template/View/Login.html
+Would skip repository resource/themes/SB-Admin-BS4-Angular-2

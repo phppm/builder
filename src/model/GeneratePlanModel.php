@@ -1,4 +1,5 @@
 <?php
+
 namespace rustphp\builder\model;
 
 use rustphp\builder\util\Config;
@@ -10,8 +11,8 @@ use rustphp\builder\util\OutputBuffer;
  * @package app\service\generator
  */
 class GeneratePlanModel {
-    protected $dataSource = NULL;
-    protected $config     = NULL;
+    protected $dataSource = null;
+    protected $config     = null;
     protected $files      = [];
     protected $tables     = [];
 
@@ -56,7 +57,7 @@ class GeneratePlanModel {
                 print_r($params);
                 die($e->getMessage());
             }
-            $files[$file] =  $file_content;
+            $files[$file] = $file_content;
         }
         return $this;
     }
@@ -68,7 +69,7 @@ class GeneratePlanModel {
         foreach ($this->files as $output_file => $file) {
             $dir = dirname($output_path . $output_file);
             if (!is_dir($dir)) {
-                mkdir($dir, 0755, TRUE);
+                mkdir($dir, 0755, true);
             }
             file_put_contents($output_path . $output_file, $file);
             echo "build ", $output_path, $output_file, " ok \n";
@@ -89,14 +90,14 @@ class GeneratePlanModel {
      * @param array  $config
      */
     protected function initGenerateFile(String $templateFile, Array $config) {
-        $generatePath = $config['path']??NULL;
+        $generatePath = $config['path']??null;
         if (!$generatePath) {
             return;
         }
-        $baseConfig = $this->config->get('base', TRUE);
+        $baseConfig = $this->config->get('base', true);
         $files = &$this->files;
-        $generateByProject = $config['generate_by_project']??FALSE;
-        $is_append = $config['is_append']??FALSE;
+        $generateByProject = $config['generate_by_project']??false;
+        $is_append = $config['is_append']??false;
         if (!$generateByProject) {
             $files[$generatePath] = [
                 'template' => $templateFile,
@@ -106,7 +107,7 @@ class GeneratePlanModel {
             return;
         }
         $dataSource = $this->dataSource;
-        $project = $this->config->get('project', TRUE);
+        $project = $this->config->get('project', true);
         $this->initProjectFiles($project, $dataSource, [
             'config'       => $config,
             'baseConfig'   => $baseConfig,
@@ -125,27 +126,31 @@ class GeneratePlanModel {
      */
     protected function initProjectFiles($project, $dataSource, $params) {
         $config = $params['config']??[];
-        $generatePath = $params['generatePath']??NULL;
-        $templateFile = $params['templateFile']??NULL;
+        $generatePath = $params['generatePath']??null;
+        $templateFile = $params['templateFile']??null;
         $baseConfig = $params['baseConfig']??[];
-        $is_append = $params['is_append']??FALSE;
+        $is_append = $params['is_append']??false;
         $files = &$this->files;
         foreach ($project as $module => $functions) {
+            $moduleInfo = explode('=', $module);
+            $moduleId = isset($moduleInfo[0]) ? $moduleInfo[0] : $module;
+            $moduleName = isset($moduleInfo[1]) ? $moduleInfo[1] : $module;
             foreach ($functions as $table => $class_name) {
-                $tableInfo = $dataSource[$table] ?? NULL;
+                $tableInfo = $dataSource[$table] ?? null;
                 $prefix = $config['prefix'] ?? '';
                 $suffix = $config['suffix'] ?? '';
-                $use_table_name = $config['use_table_name'] ?? FALSE;
+                $use_table_name = $config['use_table_name'] ?? false;
                 $name = $use_table_name ? $table : $class_name;
                 $fileName = $prefix . $name . $suffix;
                 $useModule = $config['use_module']??0;
                 $moduleParams = [$fileName];
                 if (1 == $useModule) {
-                    $moduleParams = [$module, $fileName];
+                    $moduleParams = [$moduleName, $fileName];
                 }
                 $file = vsprintf($generatePath, $moduleParams);
                 $model = new GenerateModel(array_merge($baseConfig, [
-                    'moduleName' => $module,
+                    'moduleName' => $moduleName,
+                    'moduleId' => $moduleId,
                     'className'  => $class_name,
                     'tableName'  => $table,
                     'tableInfo'  => $tableInfo,
@@ -170,7 +175,7 @@ class GeneratePlanModel {
      */
     protected function initTemplate(String $templatePath) {
         $config = $this->config;
-        $templates = $config->get('templates', TRUE);
+        $templates = $config->get('templates', true);
         foreach ($templates as $templateFile => $template) {
             if (!$template) {
                 continue;
