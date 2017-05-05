@@ -17,6 +17,14 @@ class GenerateModel {
     private $tableModel;
     private $outputPath, $sourceRootPath, $composerName;
     private $requestPath;
+    /**
+     * @var string $type
+     */
+    private $type;
+    /**
+     * @var string $baseClass
+     */
+    private $baseClass;
 
     /**
      * GenerateModel constructor.
@@ -25,6 +33,20 @@ class GenerateModel {
      */
     public function __construct($setting) {
         $this->initSetting($setting);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseClass(): string {
+        return $this->baseClass;
+    }
+
+    /**
+     * @param string $baseClass
+     */
+    public function setBaseClass(string $baseClass) {
+        $this->baseClass = $baseClass;
     }
 
     /**
@@ -147,6 +169,20 @@ class GenerateModel {
     }
 
     /**
+     * @return string
+     */
+    public function getType(): string {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type) {
+        $this->type = $type;
+    }
+
+    /**
      * @return mixed
      */
     public function getNamespace() {
@@ -222,6 +258,10 @@ class GenerateModel {
         //设置
         $namespace = $setting['namespace']??null;
         $this->setNamespace($namespace);
+        //类型
+        $this->setType($setting['type']??'');
+        //基础类
+        $this->setBaseClass($setting['baseClass']??'');
         $composerName = $setting['composerName']??null;
         $this->setComposerName($composerName);
         $sourcePath = $setting['sourcePath']??null;
