@@ -276,7 +276,7 @@ class GenerateModel {
         //设置
         $namespace=$setting['namespace']??null;
         $this->setNamespace($namespace);
-        $this->setProjectErrorNum($setting['projectErrorNum']);
+        $this->setProjectErrorNum($setting['projectErrorNum']??0);
         //类型
         $this->setType($setting['type']??'');
         //基础类

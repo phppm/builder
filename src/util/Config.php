@@ -1,5 +1,8 @@
 <?php
+
 namespace rustphp\builder\util;
+
+use rustphp\builder\exception\ConfigException;
 
 /**
  * Class Config 配置
@@ -8,8 +11,8 @@ namespace rustphp\builder\util;
  */
 final class Config {
     protected static $hash;
-    protected static $_instance = [];
-    protected $_configItem;
+    protected static $_instance=[];
+    protected        $_configItem;
 
     /**
      * 防止clone
@@ -21,37 +24,39 @@ final class Config {
      * 载入配置文件并返回对象
      *
      * @param string $name
-     * @param bool $is_original 是否原样返回
+     * @param bool   $is_original 是否原样返回
      *
-     * @return null|Config
+     * @return mixed|object
+     * @throws ConfigException
      */
-    private static function _loadConfigFile($name, $is_original = FALSE) {
-        $file_name = ROOT_PATH.'/resource/' . str_replace('.', DIRECTORY_SEPARATOR, $name) . '.php';
+    private static function _loadConfigFile($name, $is_original=false) {
+        $file_name=ROOT_PATH . '/resource/' . str_replace('.', DIRECTORY_SEPARATOR, $name) . '.php';
         if (!file_exists($file_name)) {
-            die('config failed:not found ' . $file_name);
-            return NULL;
+            //die('config failed:not found ' . $file_name);
+            throw new ConfigException('not found config file!');
         }
-        $result = require($file_name);
+        $result=require($file_name);
         if (!$result) {
-            return NULL;
+            //            return NULL;
+            throw new ConfigException('no config item!');
         }
         if ($is_original) {
             return $result;
         }
-        return (object) $result;
+        return (object)$result;
     }
 
     /**
      * 载入配置项
      *
      * @param string $name
-     * @param bool $is_original 是否原样返回
+     * @param bool   $is_original 是否原样返回
      *
      * @return Config
      */
-    private function _loadItem($name, $is_original = FALSE) {
+    private function _loadItem($name, $is_original=false) {
         if (!isset($this->_configItem->$name)) {
-            return NULL;
+            return null;
         }
         if ($is_original) {
             return $this->_configItem->$name;
@@ -59,7 +64,7 @@ final class Config {
         if (!is_object($this->_configItem->$name) && !is_array($this->_configItem->$name)) {
             return $this->_configItem->$name;
         }
-        return new Config((object) $this->_configItem->$name);
+        return new Config((object)$this->_configItem->$name);
     }
 
     /**
@@ -68,12 +73,12 @@ final class Config {
      * @param $config
      */
     public function __construct($config) {
-        $configItem = $config;
+        $configItem=$config;
         if (is_string($config)) {
             //初次载入
-            $configItem = self::_loadConfigFile($config, FALSE);
+            $configItem=self::_loadConfigFile($config, false);
         }
-        $this->_configItem = $configItem;
+        $this->_configItem=$configItem;
     }
 
     /**
@@ -91,23 +96,24 @@ final class Config {
      * 获取配置项设定值
      *
      * @param string $name
-     * @param bool $is_original 是否返回实例
+     * @param bool   $is_original 是否返回实例
      *
      * @return Config|string|int
      */
-    public function get($name, $is_original = FALSE) {
+    public function get($name, $is_original=false) {
         return $this->_loadItem($name, $is_original);
     }
 
     /**
      * 获取配置的hash
+     *
      * @return mixed
      */
     public function getHashKey() {
         if (self::$hash) {
             return self::$hash;
         }
-        self::$hash = md5(json_encode($this->_configItem));
+        self::$hash=md5(json_encode($this->_configItem));
         return self::$hash;
     }
 
@@ -119,11 +125,11 @@ final class Config {
      *
      * @return bool|null
      */
-    public function set($name = '', Config $obj) {
+    public function set($name='', Config $obj) {
         if (!$name) {
-            return NULL;
+            return null;
         }
-        $this->$name = $obj;
-        return TRUE;
+        $this->$name=$obj;
+        return true;
     }
 }

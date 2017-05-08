@@ -128,7 +128,8 @@ class GeneratePlanModel {
         $config=$params['config']??[];
         $baseConfig=$params['baseConfig']??[];
         $errorNumIncrease=($baseConfig['errorNumIncrease']??200) + 0;
-        $projectErrorNumInitialized=($baseConfig['projectErrorNum']??10000) + 0;
+        $projectErrorNumInitialized=($baseConfig['projectErrInitNum']??10000) + 0;
+        unset($baseConfig['errorNumIncrease'], $baseConfig['projectErrInitNum']);
         $baseConfig['baseClass']=$config['base_class']??'';
         $generateInfo=[
             'path'    =>$params['generatePath']??null,
@@ -148,7 +149,7 @@ class GeneratePlanModel {
                     'className'      =>$class_name,
                     'tableName'      =>$table,
                     'tableInfo'      =>$tableInfo,
-                    'projectErrorNum'=>$projectErrorNumInitialized
+                    'projectErrorNum'=>$projectErrorNumInitialized + 0
                 ]);
                 //文件名初始化
                 $prefix=$config['prefix'] ?? '';
