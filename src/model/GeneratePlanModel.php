@@ -11,10 +11,10 @@ use rustphp\builder\util\OutputBuffer;
  * @package app\service\generator
  */
 class GeneratePlanModel {
-    protected $dataSource = null;
-    protected $config     = null;
-    protected $files      = [];
-    protected $tables     = [];
+    protected $dataSource=null;
+    protected $config    =null;
+    protected $files     =[];
+    protected $tables    =[];
 
     /**
      * GeneratePlanModel constructor.
@@ -24,8 +24,8 @@ class GeneratePlanModel {
      * @param string $template_path
      */
     public function __construct($data_source, Config $config, $template_path) {
-        $this->dataSource = $data_source;
-        $this->config = $config;
+        $this->dataSource=$data_source;
+        $this->config=$config;
         $this->initTemplate($template_path);
     }
 
@@ -33,20 +33,20 @@ class GeneratePlanModel {
      * @return $this
      */
     public function build() {
-        $files = &$this->files;
+        $files= &$this->files;
         if (!$files) {
             return $this;
         }
-        foreach ($files as $file => $params) {
-            $file_content = '';
-            $template_file = $params['template'];
-            $models = $params['model'];
-            $models = !is_array($models) ? [$models] : $models;
+        foreach ($files as $file=>$params) {
+            $file_content='';
+            $template_file=$params['template'];
+            $models=$params['model'];
+            $models=!is_array($models) ? [$models] : $models;
             try {
                 foreach ($models as $model) {
                     OutputBuffer::start();
                     require($template_file);
-                    $file_content .= OutputBuffer::getAndClean();
+                    $file_content.=OutputBuffer::getAndClean();
                 }
             } catch (\Error $e) {
                 var_dump($file);
@@ -57,7 +57,7 @@ class GeneratePlanModel {
                 print_r($params);
                 die($e->getMessage());
             }
-            $files[$file] = $file_content;
+            $files[$file]=$file_content;
         }
         return $this;
     }
@@ -66,8 +66,8 @@ class GeneratePlanModel {
      * @param string $output_path
      */
     public function output($output_path) {
-        foreach ($this->files as $output_file => $file) {
-            $dir = dirname($output_path . $output_file);
+        foreach ($this->files as $output_file=>$file) {
+            $dir=dirname($output_path . $output_file);
             if (!is_dir($dir)) {
                 mkdir($dir, 0755, true);
             }
@@ -90,30 +90,30 @@ class GeneratePlanModel {
      * @param array  $config
      */
     protected function initGenerateFile(String $templateFile, Array $config) {
-        $generatePath = $config['path']??null;
+        $generatePath=$config['path']??null;
         if (!$generatePath) {
             return;
         }
-        $baseConfig = $this->config->get('base', true);
-        $files = &$this->files;
-        $generateByProject = $config['generate_by_project']??false;
-        $is_append = $config['is_append']??false;
+        $baseConfig=$this->config->get('base', true);
+        $files= &$this->files;
+        $generateByProject=$config['generate_by_project']??false;
+        $is_append=$config['is_append']??false;
         if (!$generateByProject) {
-            $files[$generatePath] = [
-                'template' => $templateFile,
-                'model'    => new GenerateModel($baseConfig),
-                'flags'    => $is_append ? FILE_APPEND : 0,
+            $files[$generatePath]=[
+                'template'=>$templateFile,
+                'model'   =>new GenerateModel($baseConfig),
+                'flags'   =>$is_append ? FILE_APPEND : 0,
             ];
             return;
         }
-        $dataSource = $this->dataSource;
-        $project = $this->config->get('project', true);
+        $dataSource=$this->dataSource;
+        $project=$this->config->get('project', true);
         $this->initProjectFiles($project, $dataSource, [
-            'config'       => $config,
-            'baseConfig'   => $baseConfig,
-            'templateFile' => $templateFile,
-            'generatePath' => $generatePath,
-            'is_append'    => $is_append,
+            'config'      =>$config,
+            'baseConfig'  =>$baseConfig,
+            'templateFile'=>$templateFile,
+            'generatePath'=>$generatePath,
+            'is_append'   =>$is_append,
         ]);
     }
 
@@ -125,52 +125,56 @@ class GeneratePlanModel {
      * @param array $params
      */
     protected function initProjectFiles($project, $dataSource, $params) {
-        $config = $params['config']??[];
-        $baseConfig = $params['baseConfig']??[];
-        $baseConfig['baseClass'] = $config['base_class']??'';
-        $generateInfo = [
-            'path'     => $params['generatePath']??null,
-            'template' => $params['templateFile']??null,
-            'isAppend' => $params['is_append']??false
+        $config=$params['config']??[];
+        $baseConfig=$params['baseConfig']??[];
+        $errorNumIncrease=($baseConfig['errorNumIncrease']??200) + 0;
+        $projectErrorNumInitialized=($baseConfig['projectErrorNum']??10000) + 0;
+        $baseConfig['baseClass']=$config['base_class']??'';
+        $generateInfo=[
+            'path'    =>$params['generatePath']??null,
+            'template'=>$params['templateFile']??null,
+            'isAppend'=>$params['is_append']??false,
         ];
         //$files = &$this->files;
-        foreach ($project as $module => $functions) {
-            $moduleInfo = explode('=', $module);
-            $moduleId = isset($moduleInfo[0]) ? $moduleInfo[0] : $module;
-            $moduleName = isset($moduleInfo[1]) ? $moduleInfo[1] : $module;
-            foreach ($functions as $table => $class_name) {
-                $tableInfo = $dataSource[$table] ?? null;
-                $generateInfo['params'] = array_merge($baseConfig, [
-                    'moduleName' => $moduleName,
-                    'moduleId'   => $moduleId,
-                    'className'  => $class_name,
-                    'tableName'  => $table,
-                    'tableInfo'  => $tableInfo
+        foreach ($project as $module=>$functions) {
+            $moduleInfo=explode('=', $module);
+            $moduleId=isset($moduleInfo[0]) ? $moduleInfo[0] : $module;
+            $moduleName=isset($moduleInfo[1]) ? $moduleInfo[1] : $module;
+            foreach ($functions as $table=>$class_name) {
+                $tableInfo=$dataSource[$table] ?? null;
+                $generateInfo['params']=array_merge($baseConfig, [
+                    'moduleName'     =>$moduleName,
+                    'moduleId'       =>$moduleId,
+                    'className'      =>$class_name,
+                    'tableName'      =>$table,
+                    'tableInfo'      =>$tableInfo,
+                    'projectErrorNum'=>$projectErrorNumInitialized
                 ]);
                 //文件名初始化
-                $prefix = $config['prefix'] ?? '';
-                $suffix = $config['suffix'] ?? '';
-                $use_table_name = $config['use_table_name'] ?? false;
-                $name = $use_table_name ? $table : $class_name;
-                $fileName = $prefix . $name . $suffix;
-                $useModule = $config['use_module']??0;
+                $prefix=$config['prefix'] ?? '';
+                $suffix=$config['suffix'] ?? '';
+                $use_table_name=$config['use_table_name'] ?? false;
+                $name=$use_table_name ? $table : $class_name;
+                $fileName=$prefix . $name . $suffix;
+                $useModule=$config['use_module']??0;
                 //按类型生成
-                $generateByTypes = $config['generate_by_types']??[];
+                $generateByTypes=$config['generate_by_types']??[];
                 if ($generateByTypes) {
                     foreach ($generateByTypes as $typeName) {
-                        $fileNameParams = 1 == $useModule ? [$moduleName] : [];
+                        $fileNameParams=1 == $useModule ? [$moduleName] : [];
                         array_push($fileNameParams, $fileName);
                         array_push($fileNameParams, $typeName);
-                        $generateInfo['params']['type'] = $typeName;
-                        $generateInfo['file'] = vsprintf($generateInfo['path'], $fileNameParams);
+                        $generateInfo['params']['type']=$typeName;
+                        $generateInfo['file']=vsprintf($generateInfo['path'], $fileNameParams);
                         $this->generateModelFile($generateInfo, $this->files);
                     }
                 } else {
-                    $moduleParams = 1 == $useModule ? [$moduleName] : [];
+                    $moduleParams=1 == $useModule ? [$moduleName] : [];
                     array_push($moduleParams, $fileName);
-                    $generateInfo['file'] = vsprintf($generateInfo['path'], $moduleParams);
+                    $generateInfo['file']=vsprintf($generateInfo['path'], $moduleParams);
                     $this->generateModelFile($generateInfo, $this->files);
                 }
+                $projectErrorNumInitialized+=$errorNumIncrease;
             }
         }
     }
@@ -181,9 +185,9 @@ class GeneratePlanModel {
      * @param String $templatePath
      */
     protected function initTemplate(String $templatePath) {
-        $config = $this->config;
-        $templates = $config->get('templates', true);
-        foreach ($templates as $templateFile => $template) {
+        $config=$this->config;
+        $templates=$config->get('templates', true);
+        foreach ($templates as $templateFile=>$template) {
             if (!$template) {
                 continue;
             }
@@ -199,16 +203,16 @@ class GeneratePlanModel {
      * @param array $files
      */
     protected function generateModelFile(array $generateInfo, array &$files): void {
-        $model = new GenerateModel($generateInfo['params']);
-        $models = $model;
-        $file = $generateInfo['file'];
+        $model=new GenerateModel($generateInfo['params']);
+        $models=$model;
+        $file=$generateInfo['file'];
         if ($generateInfo['isAppend']) {
-            $models = $files[$file]['model']??[];
-            $models[] = $model;
+            $models=$files[$file]['model']??[];
+            $models[]=$model;
         }
-        $files[$file] = [
-            'template' => $generateInfo['template'],
-            'model'    => $models,
+        $files[$file]=[
+            'template'=>$generateInfo['template'],
+            'model'   =>$models,
         ];
     }
 }

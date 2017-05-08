@@ -7,8 +7,8 @@ namespace rustphp\builder\model;
  * @package app\model\common
  */
 class GenerateModel {
-    const CAMEL_NAMED = 1;//驼峰命名
-    const SNAKE_NAMED = 2;//蛇形命名
+    const CAMEL_NAMED=1;//驼峰命名
+    const SNAKE_NAMED=2;//蛇形命名
     private static $_nameRule; //命名规则
     private        $namespace, $classId, $className, $classNote, $moduleId, $moduleName;
     /**
@@ -17,6 +17,10 @@ class GenerateModel {
     private $tableModel;
     private $outputPath, $sourceRootPath, $composerName;
     private $requestPath;
+    /**
+     * @var int $projectErrorNum
+     */
+    private $projectErrorNum;
     /**
      * @var string $type
      */
@@ -46,7 +50,7 @@ class GenerateModel {
      * @param string $baseClass
      */
     public function setBaseClass(string $baseClass) {
-        $this->baseClass = $baseClass;
+        $this->baseClass=$baseClass;
     }
 
     /**
@@ -60,7 +64,7 @@ class GenerateModel {
      * @param mixed $classId
      */
     public function setClassId($classId) {
-        $this->classId = $classId;
+        $this->classId=$classId;
     }
 
     /**
@@ -74,7 +78,7 @@ class GenerateModel {
      * @param mixed $className
      */
     public function setClassName($className) {
-        $this->className = $className;
+        $this->className=$className;
     }
 
     /**
@@ -88,7 +92,7 @@ class GenerateModel {
      * @param mixed $classNote
      */
     public function setClassNote($classNote) {
-        $this->classNote = $classNote;
+        $this->classNote=$classNote;
     }
 
     /**
@@ -102,7 +106,7 @@ class GenerateModel {
      * @param mixed $composerName
      */
     public function setComposerName($composerName) {
-        $this->composerName = $composerName;
+        $this->composerName=$composerName;
     }
 
     /**
@@ -123,7 +127,21 @@ class GenerateModel {
      * @param mixed $outputPath
      */
     public function setOutputPath($outputPath) {
-        $this->outputPath = $outputPath;
+        $this->outputPath=$outputPath;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProjectErrorNum(): int {
+        return $this->projectErrorNum;
+    }
+
+    /**
+     * @param int $projectErrorNum
+     */
+    public function setProjectErrorNum(int $projectErrorNum) {
+        $this->projectErrorNum=$projectErrorNum;
     }
 
     public function getRequestPath() {
@@ -131,7 +149,7 @@ class GenerateModel {
     }
 
     public function setRequestPath($path) {
-        $this->requestPath = $path;
+        $this->requestPath=$path;
     }
 
     /**
@@ -145,7 +163,7 @@ class GenerateModel {
      * @param mixed $sourceRootPath
      */
     public function setSourceRootPath($sourceRootPath) {
-        $this->sourceRootPath = $sourceRootPath;
+        $this->sourceRootPath=$sourceRootPath;
     }
 
     /**
@@ -164,7 +182,7 @@ class GenerateModel {
      * @return bool
      */
     public function setTableModel($name, $comment, $primaryKey, $columns) {
-        $this->tableModel = new DataTableModel($name, $comment, $primaryKey, $columns);
+        $this->tableModel=new DataTableModel($name, $comment, $primaryKey, $columns);
         return true;
     }
 
@@ -179,7 +197,7 @@ class GenerateModel {
      * @param string $type
      */
     public function setType(string $type) {
-        $this->type = $type;
+        $this->type=$type;
     }
 
     /**
@@ -193,7 +211,7 @@ class GenerateModel {
      * @param mixed $namespace
      */
     public function setNamespace($namespace) {
-        $this->namespace = $namespace;
+        $this->namespace=$namespace;
     }
 
     public function getModuleId() {
@@ -201,7 +219,7 @@ class GenerateModel {
     }
 
     public function setModuleId($moduleId) {
-        $this->moduleId = $moduleId;
+        $this->moduleId=$moduleId;
     }
 
     /**
@@ -215,7 +233,7 @@ class GenerateModel {
      * @param mixed $moduleName
      */
     public function setModuleName($moduleName) {
-        $this->moduleName = $moduleName;
+        $this->moduleName=$moduleName;
     }
 
     /**
@@ -240,12 +258,12 @@ class GenerateModel {
      * @return string
      */
     private function getCamelName($name) {
-        $names = explode('_', $name);
-        $result = lcfirst(array_shift($names));
-        $names = array_map(function($value) {
+        $names=explode('_', $name);
+        $result=lcfirst(array_shift($names));
+        $names=array_map(function($value) {
             return ucfirst($value);
         }, $names);
-        $result .= implode('', $names);
+        $result.=implode('', $names);
         return $result;
     }
 
@@ -256,37 +274,38 @@ class GenerateModel {
      */
     private function initSetting($setting) {
         //设置
-        $namespace = $setting['namespace']??null;
+        $namespace=$setting['namespace']??null;
         $this->setNamespace($namespace);
+        $this->setProjectErrorNum($setting['projectErrorNum']);
         //类型
         $this->setType($setting['type']??'');
         //基础类
         $this->setBaseClass($setting['baseClass']??'');
-        $composerName = $setting['composerName']??null;
+        $composerName=$setting['composerName']??null;
         $this->setComposerName($composerName);
-        $sourcePath = $setting['sourcePath']??null;
+        $sourcePath=$setting['sourcePath']??null;
         $this->setSourceRootPath($sourcePath);
-        $outputPath = $setting['outputPath']??null;
+        $outputPath=$setting['outputPath']??null;
         $this->setOutputPath($outputPath);
-        $moduleName = $setting['moduleName']??null;
-        $moduleId = $setting['moduleId']??$moduleName;
+        $moduleName=$setting['moduleName']??null;
+        $moduleId=$setting['moduleId']??$moduleName;
         $this->setModuleName($moduleName);
         $this->setModuleId($moduleId);
-        $className = $setting['className']??null;
+        $className=$setting['className']??null;
         $this->setClassName($className);
-        $classId = $className ? $this->getCamelName($className) : null;
+        $classId=$className ? $this->getCamelName($className) : null;
         $this->setClassId($classId);
         $this->setRequestPath('/' . $moduleName . '/' . $classId);
         //table model
-        $tableName = $setting['tableName']??null;
-        $tableInfo = $setting['tableInfo']??null;
-        $tableComment = $tableInfo['comment']??null;
+        $tableName=$setting['tableName']??null;
+        $tableInfo=$setting['tableInfo']??null;
+        $tableComment=$tableInfo['comment']??null;
         $this->setClassNote($tableComment);
-        $primaryKey = $tableInfo['primaryKey']??null;
-        $primary_keys = $primaryKey && is_array($primaryKey) ? array_keys($primaryKey) : ['id'];
-        $primary_keys = count($primary_keys) >= 1 ? $primary_keys : [$primaryKey];
-        $primary_key = array_shift($primary_keys);
-        $columns = $tableInfo['columns']??[];
+        $primaryKey=$tableInfo['primaryKey']??null;
+        $primary_keys=$primaryKey && is_array($primaryKey) ? array_keys($primaryKey) : ['id'];
+        $primary_keys=count($primary_keys) >= 1 ? $primary_keys : [$primaryKey];
+        $primary_key=array_shift($primary_keys);
+        $columns=$tableInfo['columns']??[];
         $this->setTableModel($tableName, $tableComment, $primary_key, $columns);
     }
 }
