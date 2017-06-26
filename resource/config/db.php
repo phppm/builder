@@ -38,7 +38,7 @@ return [
         'landsker'=>[
             'dsn'      => 'mysql:host=localhost;dbname=landsker',
             'username' => 'landsker',
-            'password' => 'Ldsk2016@)!^',
+            'password' => 'Landsker201617@)!^!&',
             'prefix'   => '',
             'option'   => [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -72,6 +72,17 @@ return [
             'dsn'      => 'mysql:host=localhost;dbname=zj_sony',
             'username' => 'zj_sony',
             'password' => 'Sony2017@)!&',
+            'prefix'   => '',
+            'option'   => [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+            ],
+        ],
+        'iFeng'=>[
+            'dsn'      => 'mysql:host=localhost;dbname=zj_ifeng',
+            'username' => 'zj_ifeng',
+            'password' => 'iFeng2017@)!&',
             'prefix'   => '',
             'option'   => [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
