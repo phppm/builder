@@ -257,7 +257,7 @@ class GenerateModel {
      * @return string
      */
     public function getVersion() : string {
-        return $this->version;
+        return ($this->version ? '\\' . $this->version : '');
     }
 
     /**
