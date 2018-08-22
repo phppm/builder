@@ -1,5 +1,4 @@
 <?php
-
 namespace rustphp\builder\model;
 /**
  * Class GenerateModel
@@ -10,13 +9,13 @@ class GenerateModel {
     const CAMEL_NAMED=1;//驼峰命名
     const SNAKE_NAMED=2;//蛇形命名
     private static $_nameRule; //命名规则
-    private        $namespace, $classId, $className, $classNote, $moduleId, $moduleName;
+    private $namespace, $classId, $className, $classNote, $moduleId, $moduleName;
     /**
      * @var DataTableModel
      */
     private $tableModel;
     private $outputPath, $sourceRootPath, $composerName;
-    private $requestPath;
+    private $requestPath, $apiRequestPath;
     /**
      * @var int $projectErrorNum
      */
@@ -29,6 +28,10 @@ class GenerateModel {
      * @var string $baseClass
      */
     private $baseClass;
+    /**
+     * @var string $version
+     */
+    private $version;
 
     /**
      * GenerateModel constructor.
@@ -42,7 +45,7 @@ class GenerateModel {
     /**
      * @return string
      */
-    public function getBaseClass(): string {
+    public function getBaseClass() : string {
         return $this->baseClass;
     }
 
@@ -133,7 +136,7 @@ class GenerateModel {
     /**
      * @return int
      */
-    public function getProjectErrorNum(): int {
+    public function getProjectErrorNum() : int {
         return $this->projectErrorNum;
     }
 
@@ -142,6 +145,20 @@ class GenerateModel {
      */
     public function setProjectErrorNum(int $projectErrorNum) {
         $this->projectErrorNum=$projectErrorNum;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiRequestPath() {
+        return $this->apiRequestPath;
+    }
+
+    /**
+     * @param mixed $apiRequestPath
+     */
+    public function setApiRequestPath($apiRequestPath) {
+        $this->apiRequestPath=$apiRequestPath;
     }
 
     public function getRequestPath() {
@@ -177,7 +194,7 @@ class GenerateModel {
      * @param string $name
      * @param string $comment
      * @param string $primaryKey
-     * @param array  $columns
+     * @param array $columns
      *
      * @return bool
      */
@@ -189,7 +206,7 @@ class GenerateModel {
     /**
      * @return string
      */
-    public function getType(): string {
+    public function getType() : string {
         return $this->type;
     }
 
@@ -237,6 +254,20 @@ class GenerateModel {
     }
 
     /**
+     * @return string
+     */
+    public function getVersion() : string {
+        return $this->version;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion(string $version) {
+        $this->version=$version;
+    }
+
+    /**
      * 生成名称
      *
      * @param string $name
@@ -274,38 +305,41 @@ class GenerateModel {
      */
     private function initSetting($setting) {
         //设置
-        $namespace=$setting['namespace']??null;
+        $namespace=$setting['namespace'] ?? null;
         $this->setNamespace($namespace);
-        $this->setProjectErrorNum($setting['projectErrorNum']??0);
+        $this->setProjectErrorNum($setting['projectErrorNum'] ?? 0);
         //类型
-        $this->setType($setting['type']??'');
+        $this->setType($setting['type'] ?? '');
+        //版本
+        $this->setVersion($setting['version'] ?? '');
         //基础类
-        $this->setBaseClass($setting['baseClass']??'');
-        $composerName=$setting['composerName']??null;
+        $this->setBaseClass($setting['baseClass'] ?? '');
+        $composerName=$setting['composerName'] ?? null;
         $this->setComposerName($composerName);
-        $sourcePath=$setting['sourcePath']??null;
+        $sourcePath=$setting['sourcePath'] ?? null;
         $this->setSourceRootPath($sourcePath);
-        $outputPath=$setting['outputPath']??null;
+        $outputPath=$setting['outputPath'] ?? null;
         $this->setOutputPath($outputPath);
-        $moduleName=$setting['moduleName']??null;
-        $moduleId=$setting['moduleId']??$moduleName;
+        $moduleName=$setting['moduleName'] ?? null;
+        $moduleId=$setting['moduleId'] ?? $moduleName;
         $this->setModuleName($moduleName);
         $this->setModuleId($moduleId);
-        $className=$setting['className']??null;
+        $className=$setting['className'] ?? null;
         $this->setClassName($className);
         $classId=$className ? $this->getCamelName($className) : null;
         $this->setClassId($classId);
         $this->setRequestPath('/' . $moduleName . '/' . $classId);
+        $this->setApiRequestPath('/' . $classId);
         //table model
-        $tableName=$setting['tableName']??null;
-        $tableInfo=$setting['tableInfo']??null;
-        $tableComment=$tableInfo['comment']??null;
+        $tableName=$setting['tableName'] ?? null;
+        $tableInfo=$setting['tableInfo'] ?? null;
+        $tableComment=$tableInfo['comment'] ?? null;
         $this->setClassNote($tableComment);
-        $primaryKey=$tableInfo['primaryKey']??null;
+        $primaryKey=$tableInfo['primaryKey'] ?? null;
         $primary_keys=$primaryKey && is_array($primaryKey) ? array_keys($primaryKey) : ['id'];
         $primary_keys=count($primary_keys) >= 1 ? $primary_keys : [$primaryKey];
         $primary_key=array_shift($primary_keys);
-        $columns=$tableInfo['columns']??[];
+        $columns=$tableInfo['columns'] ?? [];
         $this->setTableModel($tableName, $tableComment, $primary_key, $columns);
     }
 }

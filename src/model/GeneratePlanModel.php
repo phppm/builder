@@ -127,7 +127,7 @@ class GeneratePlanModel {
     protected function initProjectFiles($project, $dataSource, $params) {
         $config=$params['config']??[];
         $baseConfig=$params['baseConfig']??[];
-        $errorNumIncrease=($baseConfig['errorNumIncrease']??200) + 0;
+        $errorNumIncrease=($baseConfig['errorNumIncrease']??100) + 0;
         $projectErrorNumInitialized=($baseConfig['projectErrInitNum']??10000) + 0;
         unset($baseConfig['errorNumIncrease'], $baseConfig['projectErrInitNum']);
         $baseConfig['baseClass']=$config['base_class']??'';

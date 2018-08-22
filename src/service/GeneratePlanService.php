@@ -45,10 +45,14 @@ class GeneratePlanService {
     public function doPlan(string $outputDir='', string $dataSourceName='') {
         //获取plan配置
         $plan_config=$this->config;
-        $plan_name=$plan_config->get('plan');
-        $frameworkTemplate=str_replace('.', '/', $plan_config->get('framework')) . '/' . $plan_name;
+        $planName=$plan_config->get('plan');
+        $framework=$plan_config->get('framework');
+        $planTemplate=$planName;
+        if ($framework) {
+            $planTemplate=str_replace('.', '/', $framework . '/' . $planName);
+        }
         //获取plan模板
-        $template_path=vsprintf('%s/resource/plan/%s/template/', [ROOT_PATH, $frameworkTemplate]);
+        $template_path=vsprintf('%s/resource/plan/%s/template/', [ROOT_PATH, $planTemplate]);
         //获取数据源名称
         $data_source_name=$dataSourceName ? $dataSourceName : $plan_config->get('dataSource');
         //输出
@@ -111,12 +115,39 @@ class GeneratePlanService {
             if ($is_primary) {
                 $primary_key[$column->Field]=$column->Field;
             }
+            $typeInfo=explode('(', $column->Type);
+            $type=$typeInfo[0] ?? $column->Type;
             $result[strtolower($column->Field)]=[
-                'name'   =>$column->Field,
-                'comment'=>$column->Comment,
+                'name'        =>$column->Field,
+                'type'        =>$type,
+                'propertyType'=>$this->getPropertyType($type),
+                'comment'     =>$column->Comment,
             ];
         }
         return ['primaryKey'=>$primary_key, 'allFields'=>$result];
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    private function getPropertyType(string $type) : string {
+        $typeMap=[
+            'tinyint'  =>'int',
+            'smallint' =>'int',
+            'mediumint'=>'int',
+            'int'      =>'int',
+            'integer'  =>'int',
+            'bigint'   =>'int',
+            'float'    =>'float',
+            'double'   =>'double',
+            'real'     =>'double',
+            'decimal'  =>'double',
+            'numeric'  =>'double',
+        ];
+        $type=$typeMap[$type] ?? 'string';
+        return $type;
     }
 
     /**

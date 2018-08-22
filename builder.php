@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 //php builder.php --plan=rustphp.rust.zj_sony.app --output=iFeng --data=iFeng
+//php builder.php --plan=zj.web_app --output=iFeng --data=iFeng
 
 defined('ROOT_PATH') or define('ROOT_PATH', __DIR__);
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
