@@ -12,5 +12,7 @@ php-diff-master/
 resource/plan/youzan
 resource/plan/zj
 resource/plan/rustphp
+resource/sql
+src/util/diff
 
 Would skip repository resource/themes/SB-Admin-BS4-Angular-2
