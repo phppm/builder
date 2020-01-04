@@ -1,6 +1,6 @@
 {
   "name": "rustphp/builder",
-  "description": "Youzan ZanPhp Builder",
+  "description": "PHP Code Generator",
   "license": "MIT",
   "authors": [
     {
