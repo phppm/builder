@@ -1,5 +1,6 @@
 composer.phar
-/vendor/
+compose.lock
+vendor/
 
 # Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
@@ -8,21 +9,8 @@ composer.phar
 output/
 
 php-diff-master/
-resource/plan/rustphp/rust/landsker/default.php
-resource/plan/rustphp/rust/landsker/template/BaseController.php
-resource/plan/rustphp/rust/landsker/template/Controller.php
-resource/plan/rustphp/rust/landsker/template/Dao.php
-resource/plan/rustphp/rust/landsker/template/Model.php
-resource/plan/rustphp/rust/landsker/template/Service.php
-resource/plan/rustphp/rust/landsker/template/composer.json
-resource/plan/rustphp/rust/landsker/template/sqlMap.php
-resource/plan/rustphp/rust/landsker/template/views/
-resource/plan/rustphp/rust/zj_ads/
-resource/plan/rustphp/rust/zj_community/
-resource/plan/youzan/zanphp/http_demo/template/BaseController.php
-resource/plan/youzan/zanphp/http_demo/template/Controller.php
-resource/plan/youzan/zanphp/http_demo/template/Dao.php
-resource/plan/youzan/zanphp/http_demo/template/Service.php
-resource/plan/youzan/zanphp/http_demo/template/View/Index.html
-resource/plan/youzan/zanphp/http_demo/template/View/Login.html
+resource/plan/youzan
+resource/plan/zj
+resource/plan/rustphp
+
 Would skip repository resource/themes/SB-Admin-BS4-Angular-2
